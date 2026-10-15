@@ -7,7 +7,9 @@
         <link rel="icon" type="image/png" href="favicon.png">
         <meta name="description" content="Celebrate the wedding of Ramesh Kumar and Tamil Selvi on 15 November 2026. Join us with your blessings and wishes.">
         <meta name="theme-color" content="#5a321c">
-          <link rel="stylesheet" href="style.css" />
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body class="locked">
         <div id="entry">
@@ -29,7 +31,7 @@
         </div>
         <main id="main">
             <button class="music-btn" id="musicBtn" aria-label="Play background music" title="Music">♪</button>
-            <audio id="bgm" loop preload="auto" src="assets/Welcome.mp3"></audio>
+            <audio id="bgm" loop preload="auto" src="assets/music.mp3"></audio>
             <section class="hero">
                 <div class="hero-sparkles" aria-hidden="true"></div>
                 <div class="hero-inner fade-in">
@@ -43,56 +45,24 @@
                     <div class="discover">SCROLL TO DISCOVER OUR STORY ↓</div>
                 </div>
             </section>
-            <section class="reveal-section date-section" id="date">
-                <div class="date-inner">
-                    <h2 class="section-title">Our Special Date</h2>
-                    <div class="sub">A little touch reveals the date</div>
-                    <div class="hearts">
-                        <div class="heart-card">
-                            <div class="heart">
-                                <div class="heart-base"></div>
-                                <div class="heart-text">15</div>
-                                <canvas class="scratch-canvas" data-key="22"></canvas>
-                            </div>
-                            <div class="heart-label">Date</div>
-                        </div>
-                        <div class="heart-card">
-                            <div class="heart">
-                                <div class="heart-base"></div>
-                                <div class="heart-text" style="font-size:21px">NOV</div>
-                                <canvas class="scratch-canvas" data-key="NOV"></canvas>
-                            </div>
-                            <div class="heart-label">Month</div>
-                        </div>
-                        <div class="heart-card">
-                            <div class="heart">
-                                <div class="heart-base"></div>
-                                <div class="heart-text" style="font-size:22px">2026</div>
-                                <canvas class="scratch-canvas" data-key="2026"></canvas>
-                            </div>
-                            <div class="heart-label">Year</div>
-                        </div>
-                    </div>
-                    <div class="scratch-tip">✦ Reveal each heart to discover the date ✦</div>
-                </div>
-            </section>
             <section class="reveal-section timeline" id="timeline">
                 <div class="timeline-inner">
                     <h2 class="section-title timeline-title">Wedding Timeline</h2>
-                    <div class="sub">Three moments, one beautiful celebration</div>
+                    <div class="sub">Two beautiful celebrations, one forever</div>
+                    <div class="timeline-decoration" aria-hidden="true">✦ &nbsp; ♥ &nbsp; ✦</div>
                     <div class="rail">
-                        <article class="event">
+                        <article class="event"><span class="event-symbol" aria-hidden="true">✧</span>
                             <div class="date">
                                 14<br>
                                 NOV<small>2026</small>
                             </div>
                             <div class="point"></div>
                             <div class="info">
-                                <h3>Evening Reception</h3>
+                                <h3>Reception</h3>
                                 <p>7:45 PM – 8:45 PM</p>
                             </div>
                         </article>
-                        <article class="event">
+                        <article class="event"><span class="event-symbol" aria-hidden="true">♥</span>
                             <div class="date">
                                 15<br>
                                 NOV<small>2026</small>
@@ -107,12 +77,12 @@
                     <div class="venue">
                         <div class="eyebrow">Venue</div>
                         <div class="venue-title">Kurinjii Mahal Muthanampalayam Tiruppur</div>
-                        <div class="venue-sub">Kurinjii Rd, Muthanampalayam, Tiruppur, Tamil Nadu 641606</div>
                         <a class="map-btn" target="_blank" rel="noopener" href="https://maps.app.goo.gl/NVXcCCZq2K7c6fYa9?g_st=aw">OPEN IN MAPS</a>
                     </div>
                 </div>
             </section>
             <section class="reveal-section countdown" id="countdown">
+                <div id="countdownHearts" class="countdown-hearts" aria-hidden="true"></div>
                 <div class="count-panel">
                     <div class="eyebrow">The big day is getting closer</div>
                     <h2 class="section-title">Counting Down to Forever</h2>
@@ -138,23 +108,27 @@
                     <div class="count-note">🌹15 November 2026🌹7:45 AM - 8:45 AM🌹</div>
                 </div>
             </section>
-            <section class="reveal-section moments" id="moments">
-                <div class="moment-inner">
-                    <div class="eyebrow">Our Moments</div>
-                    <h2 class="section-title" style="color:#f3d18b">Little pieces of forever</h2>
-                    <div class="moment-sub">Swipe left or right through our favorite memories</div>
-                    <div class="polaroid-wrap" id="momentWrap">
-                        <div class="polaroid" id="polaroid">
-                            <img id="momentImg" src="assets/moment-1.png" alt="Wedding moment">
-                            <div class="caption" id="caption">Our Story Began With Traditional Blessings.</div>
-                        </div>
+            <section class="reveal-section moments gallery-section" id="moments">
+                <div class="gallery-inner">
+                    <div class="eyebrow">OUR MOMENTS · OUR STORY</div>
+                    <h2 class="section-title">A Gallery of Forever</h2>
+                    <p class="moment-sub">Every picture holds a piece of our journey together.</p>
+                    <div class="gallery-ornament" aria-hidden="true">❧ ── ✦ ── ❧</div>
+                    <div class="gallery-grid gallery-mosaic" role="group" aria-label="Wedding photo gallery">
+                        <button class="gallery-tile" type="button" data-gallery-index="0" aria-label="View photo 1: Traditional blessings"><img src="assets/moment-1.png" alt="Traditional blessings" loading="lazy" decoding="async"><span class="gallery-caption">Traditional blessings</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
+                        <button class="gallery-tile" type="button" data-gallery-index="1" aria-label="View photo 2: A moment of prayer"><img src="assets/moment-2.png" alt="A moment of prayer" loading="lazy" decoding="async"><span class="gallery-caption">A moment of prayer</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
+                        <button class="gallery-tile" type="button" data-gallery-index="2" aria-label="View photo 3: A beautiful wedding portrait"><img src="assets/moment-3.png" alt="A beautiful wedding portrait" loading="lazy" decoding="async"><span class="gallery-caption">A beautiful wedding portrait</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
+                        <button class="gallery-tile" type="button" data-gallery-index="3" aria-label="View photo 4: Cherished traditions"><img src="assets/moment-4.png" alt="Cherished traditions" loading="lazy" decoding="async"><span class="gallery-caption">Cherished traditions</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
+                        <button class="gallery-tile" type="button" data-gallery-index="4" aria-label="View photo 5: Together in every moment"><img src="assets/moment-5.png" alt="Together in every moment" loading="lazy" decoding="async"><span class="gallery-caption">Together in every moment</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
+                        <button class="gallery-tile" type="button" data-gallery-index="5" aria-label="View photo 6: A lifetime of love"><img src="assets/moment-6.png" alt="A lifetime of love" loading="lazy" decoding="async"><span class="gallery-caption">A lifetime of love</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
+                        <button class="gallery-tile" type="button" data-gallery-index="6" aria-label="View photo 7: Wedding memories"><img src="assets/moment-1.png" alt="Wedding memories" loading="lazy" decoding="async"><span class="gallery-caption">Wedding memories</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
                     </div>
-                    <div class="controls">
-                        <button class="arrow" id="prev" aria-label="Previous photo">‹</button>
-                        <div class="counter" id="counter">01 / 05</div>
-                        <button class="arrow" id="next" aria-label="Next photo">›</button>
-                    </div>
-                    <div class="swipe">Swipe left / right • or tap the arrows</div>
+                </div>
+                <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Photo gallery" hidden>
+                    <button class="gallery-close" id="galleryClose" aria-label="Close gallery">×</button>
+                    <button class="gallery-nav gallery-prev" id="galleryPrev" aria-label="Previous photo">‹</button>
+                    <figure class="gallery-view"><img id="galleryImage" alt=""><figcaption id="galleryCaption"></figcaption><div class="gallery-count" id="galleryCount"></div></figure>
+                    <button class="gallery-nav gallery-next" id="galleryNext" aria-label="Next photo">›</button>
                 </div>
             </section>
 
@@ -191,6 +165,7 @@
 
 
             <section class="reveal-section wishes-section wishes-v3" id="wishes">
+ <div id="floatHearts" class="floating-wish-hearts" aria-hidden="true"></div>
  <div class="wishes-inner">
   <div class="eyebrow">BLESSINGS</div>
   <h2 class="wishes-script-title">Send Your Wishes</h2>
@@ -247,22 +222,11 @@
  </div>
  <div class="wish-floating-flowers" aria-hidden="true">✿ <span>♥</span> ✿</div>
 </section>
-
-
-
-            <section class="reveal-section guest" id="guest">
-                <div class="guest-card">
-                    <div class="eyebrow">A little note for you</div>
-                    <h2>Dear Guest</h2>
-                    <div class="guest-quote">“Your presence is the most beautiful gift we could ask for.”</div>
-                    <div class="guest-text">Come with your smiles, your blessings and your happiest hearts.</div>
-                    <div class="guest-text">Let us make this beautiful day a memory we will cherish forever.</div>
-                    <div class="signature">Ramesh Kumar <br> &amp; <br> Tamil Selvi</div>
-                </div>
-            </section>
             <footer class="reveal-section footer">
                 <div class="footer-names">
-                    Ramesh Kumar <span style="font-family:Great Vibes,cursive;font-size:.8em">weds</span>
+                    Ramesh Kumar <br>
+                    <span style="font-family:Great Vibes,cursive;font-size:.8em">weds<br>
+                    </span>
                     Tamil Selvi
                 </div>
                 <div class="footer-date">15 NOVEMBER 2026</div>
@@ -275,355 +239,7 @@
             </footer>
         </main>
         <div class="petal-layer" id="petals"></div>
-        <script>
-            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-            window.scrollTo(0, 0);
-            window.addEventListener('pageshow', () => {
-                if (!document.querySelector('.entry.open')) window.scrollTo(0, 0);
-            });
-
-            // Decorative sparkles: lightweight, decorative only.
-            (function(){
-              const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-              if(reduce)return;
-              document.querySelectorAll(".entry-sparkles,.hero-sparkles").forEach(layer=>{
-                for(let i=0;i<24;i++){
-                  const s=document.createElement("i");s.className="glimmer";
-                  s.style.left=(5+Math.random()*90)+"%";
-                  s.style.top=(5+Math.random()*90)+"%";
-                  s.style.animationDelay=(Math.random()*6)+"s";
-                  s.style.animationDuration=(3+Math.random()*4)+"s";
-                  layer.appendChild(s);
-                }
-              });
-            })();
-
-            const entry = document.getElementById('entry')
-              , openBtn = document.getElementById('openBtn')
-              , main = document.getElementById('main')
-              , musicBtn = document.getElementById('musicBtn')
-              , bgm = document.getElementById('bgm');
-            let opened = false
-              , playing = false;
-            // First interaction anywhere unlocks and starts invitation media.
-            // This works with the current background audio and any <video> added later.
-            let mediaUnlocked = false;
-            async function startInvitationMedia() {
-                if (mediaUnlocked) return;
-                mediaUnlocked = true;
-                const media = document.querySelectorAll('audio, video');
-                media.forEach(item => {
-                    const promise = item.play();
-                    if (promise && typeof promise.catch === 'function') {
-                        promise.catch(() => {});
-                    }
-                });
-                if (bgm && !bgm.paused) {
-                    playing = true;
-                    musicBtn.textContent = '♫';
-                }
-            }
-            document.addEventListener('pointerdown', startInvitationMedia, { once: true, passive: true });
-            document.addEventListener('touchstart', startInvitationMedia, { once: true, passive: true });
-            document.addEventListener('keydown', startInvitationMedia, { once: true });
-
-            function openInvitation() {
-                if (opened) return;
-                opened = true;
-                window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-                entry.classList.add('open');
-                document.body.classList.remove('locked');
-                bgm.play().then(() => {
-                    playing = true;
-                    musicBtn.textContent = '♫';
-                }).catch(() => {});
-                setTimeout(() => {
-                    main.classList.add('visible');
-                    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-                }, 450);
-                setTimeout(() => entry.remove(), 2100);
-            }
-
-            // Open the invitation when the guest taps/clicks anywhere on the door screen.
-            entry.addEventListener('click', openInvitation);
-            musicBtn.addEventListener('click', async () => {
-                if (bgm.paused) {
-                    try {
-                        await bgm.play();
-                        playing = true;
-                        musicBtn.textContent = '♫'
-                    } catch (e) {}
-                } else {
-                    bgm.pause();
-                    playing = false;
-                    musicBtn.textContent = '♪'
-                }
-            }
-            );
-
-            // Heart scratch: designed for a very light, natural 1–2 pass reveal.
-            let revealed = 0;
-            document.querySelectorAll('.scratch-canvas').forEach(canvas => {
-                const ctx = canvas.getContext('2d');
-                let down = false
-                  , lastX = 0
-                  , lastY = 0
-                  , distance = 0
-                  , done = false;
-                function size() {
-                    const r = canvas.getBoundingClientRect()
-                      , d = Math.min(2, devicePixelRatio || 1);
-                    canvas.width = Math.round(r.width * d);
-                    canvas.height = Math.round(r.height * d);
-                    ctx.setTransform(d, 0, 0, d, 0, 0);
-                    ctx.globalCompositeOperation = 'source-over';
-                    ctx.clearRect(0, 0, r.width, r.height);
-                    const g = ctx.createLinearGradient(0, 0, r.width, r.height);
-                    g.addColorStop(0, '#f4d77c');
-                    g.addColorStop(.48, '#b77a24');
-                    g.addColorStop(1, '#e8bd58');
-                    ctx.fillStyle = g;
-                    ctx.fillRect(0, 0, r.width, r.height);
-                    ctx.fillStyle = 'rgba(255,246,205,.38)';
-                    ctx.font = '600 18px serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('✦', r.width / 2, r.height / 2 + 6);
-                }
-                size();
-                window.addEventListener('resize', size);
-                function reveal() {
-                    if (done)
-                        return;
-                    done = true;
-                    canvas.style.transition = 'opacity .38s ease';
-                    canvas.style.opacity = '0';
-                    canvas.style.pointerEvents = 'none';
-                    revealed++;
-                    if (revealed === 3)
-                        showerPetals();
-                }
-                function wipe(e) {
-                    if (!down || done)
-                        return;
-                    const r = canvas.getBoundingClientRect()
-                      , x = e.clientX - r.left
-                      , y = e.clientY - r.top;
-                    const dx = x - lastX
-                      , dy = y - lastY;
-                    distance += Math.hypot(dx, dy);
-                    lastX = x;
-                    lastY = y;
-                    ctx.globalCompositeOperation = 'destination-out';
-                    ctx.lineCap = 'round';
-                    ctx.lineJoin = 'round';
-                    ctx.lineWidth = 44;
-                    ctx.beginPath();
-                    ctx.moveTo(x - dx, y - dy);
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.arc(x, y, 22, 0, Math.PI * 2);
-                    ctx.fill();
-                    if (distance > 62)
-                        reveal();
-                }
-                canvas.addEventListener('pointerdown', e => {
-                    if (done)
-                        return;
-                    down = true;
-                    canvas.setPointerCapture(e.pointerId);
-                    const r = canvas.getBoundingClientRect();
-                    lastX = e.clientX - r.left;
-                    lastY = e.clientY - r.top;
-                    distance = 0;
-                    wipe(e)
-                }
-                );
-                canvas.addEventListener('pointermove', wipe);
-                canvas.addEventListener('pointerup', () => down = false);
-                canvas.addEventListener('pointercancel', () => down = false);
-                canvas.addEventListener('pointerleave', () => down = false);
-            }
-            );
-            function showerPetals() {
-                const layer = document.getElementById('petals');
-                for (let i = 0; i < 48; i++) {
-                    const p = document.createElement('div');
-                    p.className = 'petal';
-                    p.style.left = (Math.random() * 100) + 'vw';
-                    p.style.animationDuration = (2.5 + Math.random() * 2) + 's';
-                    p.style.animationDelay = (Math.random() * .65) + 's';
-                    p.style.setProperty('--drift', (Math.random() * 160 - 80) + 'px');
-                    p.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
-                    layer.appendChild(p);
-                    setTimeout( () => p.remove(), 5200)
-                }
-            }
-
-            // Countdown to marriage ceremony in India time.
-            const target = new Date('2026-11-15T07:45:00+05:30').getTime();
-            function updateCountdown() {
-                const diff = Math.max(0, target - Date.now());
-                const d = Math.floor(diff / 86400000)
-                  , h = Math.floor(diff % 86400000 / 3600000)
-                  , m = Math.floor(diff % 3600000 / 60000)
-                  , s = Math.floor(diff % 60000 / 1000);
-                document.getElementById('days').textContent = String(d).padStart(3, '0');
-                document.getElementById('hours').textContent = String(h).padStart(2, '0');
-                document.getElementById('mins').textContent = String(m).padStart(2, '0');
-                document.getElementById('secs').textContent = String(s).padStart(2, '0')
-            }
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-
-            // Smooth reveal as each invitation section enters the viewport.
-            const revealObserver = new IntersectionObserver( (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                        revealObserver.unobserve(entry.target);
-                    }
-                }
-                )
-            }
-            ,{
-                threshold: .12,
-                rootMargin: '0px 0px -8% 0px'
-            });
-            document.querySelectorAll('.reveal-section').forEach(el => revealObserver.observe(el));
-
-
-
-            // Interactive blessings: chip suggestions, stickers and a letter-style success screen.
-            const wishForm = document.getElementById('wishForm');
-            const wishName = document.getElementById('wishName');
-            const wishMessage = document.getElementById('wishMessage');
-            const wishCount = document.getElementById('wishCount');
-            const wishStatus = document.getElementById('wishStatus');
-            const wishWall = document.getElementById('wishWall');
-            const wishSuccess = document.getElementById('wishSuccess');
-            const wishSticker = document.getElementById('wishSticker');
-            const escapeWish = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
-            // A fresh guestbook on each visit; no previously saved browser wishes.
-            // FormSubmit handles email delivery, not shared public wish storage.
-            let savedWishes = [];
-            function drawWishes() {
-                document.getElementById('wishesTotal').textContent = savedWishes.length + (savedWishes.length === 1 ? ' WISH ON THIS DEVICE' : ' WISHES ON THIS DEVICE');
-                wishWall.innerHTML = savedWishes.slice(-6).reverse().map(w => `<article class="wish-bubble"><div class="wish-bubble-heart">${escapeWish(w.sticker || '♥')}</div><p>“${escapeWish(w.message)}”</p><strong>— ${escapeWish(w.name)}</strong></article>`).join('');
-            }
-            drawWishes();
-            const updateCount=()=>{wishCount.textContent=`${wishMessage.value.length} / 300`;};
-            wishMessage.addEventListener('input', updateCount);
-            document.querySelectorAll('[data-blessing]').forEach(button => button.addEventListener('click', () => {
-                const phrase=button.dataset.blessing;
-                const current=wishMessage.value.trim();
-                wishMessage.value=(current ? current+' ' : '')+phrase;
-                wishMessage.value=wishMessage.value.slice(0,300);
-                updateCount();wishMessage.focus();
-                button.classList.remove('chip-pop');void button.offsetWidth;button.classList.add('chip-pop');
-            }));
-            document.querySelectorAll('[data-sticker]').forEach(button => button.addEventListener('click', () => {
-                document.querySelectorAll('[data-sticker]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false');});
-                button.classList.add('selected');button.setAttribute('aria-pressed','true');wishSticker.value=button.dataset.sticker;
-            }));
-            document.getElementById('writeAnother').addEventListener('click', () => {
-                wishSuccess.hidden=true;wishForm.hidden=false;wishForm.reset();wishSticker.value='🌸';
-                document.querySelectorAll('[data-sticker]').forEach(b=>{const selected=b.dataset.sticker==='🌸';b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});
-                updateCount();wishStatus.textContent='';wishName.focus();
-            });
-            document.getElementById('seeWish').addEventListener('click', () => document.getElementById('wishWall').scrollIntoView({behavior:'smooth',block:'center'}));
-            wishForm.addEventListener('submit', async e => {
-                e.preventDefault();
-                const name=wishName.value.trim(),message=wishMessage.value.trim();
-                if(!name || !message) return;
-                const submitBtn=wishForm.querySelector('.wish-submit');
-                submitBtn.disabled=true;submitBtn.querySelector('span').textContent='SENDING…';
-                wishStatus.textContent='Sending your blessing…';
-                try {
-                    const response=await fetch('https://formsubmit.co/ajax/dineshkumarpdk33@gmail.com',{
-                        method:'POST',
-                        headers:{'Content-Type':'application/json','Accept':'application/json'},
-                        body:JSON.stringify({
-                            name,relation:document.getElementById('wishRelation').value||'Not specified',
-                            message,sticker:wishSticker.value,
-                            _subject:'New Wedding Wish for Ramesh Kumar & Tamil Selvi',
-                            _template:'table',_honey:wishForm.elements['_honey'].value
-                        })
-                    });
-                    if(!response.ok) throw new Error('Network error');
-                    const result=await response.json();
-                    if(result.success === false || result.success === 'false') throw new Error('Submission rejected');
-                    savedWishes.push({name,message,sticker:wishSticker.value});
-                    savedWishes=savedWishes.slice(-20);
-                    drawWishes();
-                    document.getElementById('thankYouName').textContent='Thank you, '+name+'!';
-                    wishForm.hidden=true;wishSuccess.hidden=false;
-                    wishSuccess.classList.remove('success-enter');void wishSuccess.offsetWidth;wishSuccess.classList.add('success-enter');
-                    showerPetals();
-                } catch(error) {
-                    wishStatus.textContent='Could not send your wish. Please try again.';
-                } finally {
-                    submitBtn.disabled=false;submitBtn.querySelector('span').textContent='SEND WISHES';
-                }
-            });
-            // Native share sheet on supported devices; clipboard fallback on others.
-            document.getElementById('shareLocation').addEventListener('click',async () => {
-                const url='https://maps.app.goo.gl/NVXcCCZq2K7c6fYa9?g_st=aw';
-                const feedback=document.getElementById('venueFeedback');
-                try {
-                    if(navigator.share) {
-                        await navigator.share({title:'Ramesh & Tamil Selvi Wedding Venue',text:'Join us at Kurinjii Mahal, Tiruppur on 15 November 2026!',url});
-                        feedback.textContent='Location shared ♥';
-                    } else if(navigator.clipboard && window.isSecureContext) {
-                        await navigator.clipboard.writeText(url);
-                        feedback.textContent='Location link copied!';
-                    } else {
-                        const a=document.createElement('textarea');a.value=url;document.body.appendChild(a);a.select();
-                        const ok=document.execCommand('copy');a.remove();
-                        feedback.textContent=ok?'Location link copied!':'Open the location link to share it.';
-                    }
-                } catch(error) { if(error.name!=='AbortError') feedback.textContent='Please use View Location to share the link.'; }
-            });
-
-            const moments = [['assets/moment-1.png', 'Our Story Began With Traditional Blessings.'], ['assets/moment-2.png', 'Miles Apart, But always Connected.'], ['assets/moment-3.png', 'Every Video Call Feels like Coming Home.'], ['assets/moment-4.png', 'Two Hearts, One Plan - a Lifetime Together.'], ['assets/moment-5.png', 'Two Heart, One Family Together.'], ['assets/moment-6.png', 'Two Heart, One Family Together.']];
-            let idx = 0;
-            const polaroid = document.getElementById('polaroid')
-              , img = document.getElementById('momentImg')
-              , caption = document.getElementById('caption')
-              , counter = document.getElementById('counter')
-              , wrap = document.getElementById('momentWrap');
-            function render(dir=1) {
-                polaroid.classList.add(dir > 0 ? 'slide-left' : 'slide-right');
-                setTimeout( () => {
-                    img.src = moments[idx][0];
-                    caption.textContent = moments[idx][1];
-                    counter.textContent = String(idx + 1).padStart(2, '0') + ' / 06';
-                    polaroid.classList.remove('slide-left', 'slide-right');
-                }
-                , 180)
-            }
-            function next() {
-                idx = (idx + 1) % moments.length;
-                render(1)
-            }
-            function prev() {
-                idx = (idx - 1 + moments.length) % moments.length;
-                render(-1)
-            }
-            document.getElementById('next').onclick = next;
-            document.getElementById('prev').onclick = prev;
-            let sx = 0;
-            wrap.addEventListener('pointerdown', e => {
-                sx = e.clientX
-            }
-            );
-            wrap.addEventListener('pointerup', e => {
-                const dx = e.clientX - sx;
-                if (Math.abs(dx) > 45) {
-                    dx < 0 ? next() : prev()
-                }
-            }
-            );
-        </script>
+        <button id="scrollTopBtn" class="scroll-top-btn" type="button" aria-label="Scroll to top" title="Back to top">↑</button>
+        <script src="script.js" defer></script>
     </body>
 </html>
