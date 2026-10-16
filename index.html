@@ -124,12 +124,6 @@
                         <button class="gallery-tile" type="button" data-gallery-index="6" aria-label="View photo 7: Wedding memories"><img src="assets/moment-1.png" alt="Wedding memories" loading="lazy" decoding="async"><span class="gallery-caption">Wedding memories</span><span class="gallery-zoom" aria-hidden="true">↗</span></button>
                     </div>
                 </div>
-                <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Photo gallery" hidden>
-                    <button class="gallery-close" id="galleryClose" aria-label="Close gallery">×</button>
-                    <button class="gallery-nav gallery-prev" id="galleryPrev" aria-label="Previous photo">‹</button>
-                    <figure class="gallery-view"><img id="galleryImage" alt=""><figcaption id="galleryCaption"></figcaption><div class="gallery-count" id="galleryCount"></div></figure>
-                    <button class="gallery-nav gallery-next" id="galleryNext" aria-label="Next photo">›</button>
-                </div>
             </section>
 
             <section class="reveal-section location-section location-v3" id="location">
@@ -238,6 +232,24 @@
                 </div>
             </footer>
         </main>
+        <!-- Photo preview: kept at page level so it is never clipped/offset by section transforms -->
+        <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Photo gallery preview" hidden>
+            <div class="gallery-top">
+                <div class="gallery-count" id="galleryCount" aria-live="polite"></div>
+                <button class="gallery-close" id="galleryClose" type="button" aria-label="Close preview">×</button>
+            </div>
+            <button class="gallery-nav gallery-prev" id="galleryPrev" type="button" aria-label="Previous photo">‹</button>
+            <figure class="gallery-view">
+                <div class="gallery-stage">
+                    <img id="galleryImage" alt="" draggable="false">
+                    <span class="gallery-spinner" aria-hidden="true"></span>
+                    <span class="gallery-error">Photo unavailable</span>
+                </div>
+                <figcaption id="galleryCaption"></figcaption>
+            </figure>
+            <button class="gallery-nav gallery-next" id="galleryNext" type="button" aria-label="Next photo">›</button>
+            <div class="gallery-thumbs" id="galleryThumbs" aria-label="All photos"></div>
+        </div>
         <div class="petal-layer" id="petals"></div>
         <button id="scrollTopBtn" class="scroll-top-btn" type="button" aria-label="Scroll to top" title="Back to top">↑</button>
         <script src="script.js" defer></script>
