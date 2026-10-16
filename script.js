@@ -225,59 +225,158 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
                 } catch(error) { if(error.name!=='AbortError') feedback.textContent='Please use View Location to share the link.'; }
             });
 
-            // Responsive photo gallery and accessible lightbox.
+            // Photo gallery + accessible full-screen preview (lightbox).
             const galleryPhotos = Array.from(document.querySelectorAll('.gallery-tile'));
             const galleryLightbox = document.getElementById('galleryLightbox');
-            const galleryImage = document.getElementById('galleryImage');
-            const galleryCaption = document.getElementById('galleryCaption');
-            const galleryCount = document.getElementById('galleryCount');
-            let galleryIndex = 0;
-            let galleryTrigger = null;
-            function showGalleryPhoto(index) {
-                galleryIndex = (index + galleryPhotos.length) % galleryPhotos.length;
-                const photo = galleryPhotos[galleryIndex].querySelector('img');
-                galleryImage.src = photo.currentSrc || photo.src;
-                galleryImage.alt = photo.alt;
-                galleryCaption.textContent = photo.alt;
-                galleryCount.textContent = `${String(galleryIndex + 1).padStart(2, '0')} / ${String(galleryPhotos.length).padStart(2, '0')}`;
-            }
-            function closeGallery() {
-                galleryLightbox.hidden = true;
-                document.body.classList.remove('gallery-open');
-                if (galleryTrigger) galleryTrigger.focus();
-            }
-            galleryPhotos.forEach((tile, index) => tile.addEventListener('click', () => {
-                galleryTrigger = tile;
-                showGalleryPhoto(index);
-                galleryLightbox.hidden = false;
-                document.body.classList.add('gallery-open');
-                document.getElementById('galleryClose').focus();
-            }));
-            document.getElementById('galleryClose').addEventListener('click', closeGallery);
-            document.getElementById('galleryPrev').addEventListener('click', () => showGalleryPhoto(galleryIndex - 1));
-            document.getElementById('galleryNext').addEventListener('click', () => showGalleryPhoto(galleryIndex + 1));
-            galleryLightbox.addEventListener('click', e => { if (e.target === galleryLightbox) closeGallery(); });
-            document.addEventListener('keydown', e => {
-                if (galleryLightbox.hidden) return;
-                if (e.key === 'Escape') closeGallery();
-                if (e.key === 'ArrowRight') showGalleryPhoto(galleryIndex + 1);
-                if (e.key === 'ArrowLeft') showGalleryPhoto(galleryIndex - 1);
-                if (e.key === 'Tab') {
-                    const buttons = [...galleryLightbox.querySelectorAll('button')];
-                    const first = buttons[0], last = buttons[buttons.length - 1];
-                    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-                    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+            if (galleryPhotos.length && galleryLightbox) {
+                const galleryImage = document.getElementById('galleryImage');
+                const galleryStage = galleryLightbox.querySelector('.gallery-stage');
+                const galleryCaption = document.getElementById('galleryCaption');
+                const galleryCount = document.getElementById('galleryCount');
+                const galleryThumbs = document.getElementById('galleryThumbs');
+                const galleryClose = document.getElementById('galleryClose');
+                const mainEl = document.getElementById('main');
+                const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                const total = galleryPhotos.length;
+                let galleryIndex = 0;
+                let galleryTrigger = null;
+                let closeTimer = null;
+                const isOpen = () => galleryLightbox.classList.contains('is-open');
+
+                // Thumbnail strip
+                const galleryThumbButtons = galleryPhotos.map((tile, i) => {
+                    const src = tile.querySelector('img');
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'gallery-thumb';
+                    btn.setAttribute('aria-label', `Show photo ${i + 1}: ${src.alt}`);
+                    const t = document.createElement('img');
+                    t.src = src.getAttribute('src');
+                    t.alt = '';
+                    t.draggable = false;
+                    btn.appendChild(t);
+                    btn.addEventListener('click', () => { if (i !== galleryIndex) showGalleryPhoto(i, i > galleryIndex ? 1 : -1); });
+                    galleryThumbs.appendChild(btn);
+                    return btn;
+                });
+
+                function showGalleryPhoto(index, dir = 0) {
+                    galleryIndex = (index + total) % total;
+                    const source = galleryPhotos[galleryIndex].querySelector('img');
+                    const url = source.currentSrc || source.src;
+
+                    galleryStage.classList.add('is-loading');
+                    galleryStage.classList.remove('is-error');
+                    galleryImage.classList.remove('anim-next', 'anim-prev');
+
+                    const done = () => {
+                        galleryStage.classList.remove('is-loading');
+                        if (dir && !reduceMotion) {
+                            void galleryImage.offsetWidth; // restart animation
+                            galleryImage.classList.add(dir > 0 ? 'anim-next' : 'anim-prev');
+                        }
+                    };
+                    const fail = () => {
+                        galleryStage.classList.remove('is-loading');
+                        galleryStage.classList.add('is-error');
+                    };
+                    galleryImage.alt = source.alt;
+                    if (galleryImage.src === url && galleryImage.complete && galleryImage.naturalWidth) {
+                        done();
+                    } else {
+                        galleryImage.onload = done;
+                        galleryImage.onerror = fail;
+                        galleryImage.src = url;
+                    }
+
+                    galleryCaption.textContent = source.alt;
+                    galleryCount.textContent = `${String(galleryIndex + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+
+                    galleryThumbButtons.forEach((b, i) => {
+                        b.classList.toggle('is-active', i === galleryIndex);
+                        if (i === galleryIndex) {
+                            b.setAttribute('aria-current', 'true');
+                            galleryThumbs.scrollTo({
+                                left: b.offsetLeft - (galleryThumbs.clientWidth - b.offsetWidth) / 2,
+                                behavior: reduceMotion || !isOpen() ? 'auto' : 'smooth'
+                            });
+                        } else {
+                            b.removeAttribute('aria-current');
+                        }
+                    });
+
+                    // Preload neighbours so next/prev feels instant
+                    [galleryIndex - 1, galleryIndex + 1].forEach(i => {
+                        const n = galleryPhotos[(i + total) % total].querySelector('img');
+                        const pre = new Image();
+                        pre.src = n.currentSrc || n.src;
+                    });
                 }
-            });
-            let galleryTouchX = null;
-            galleryLightbox.addEventListener('touchstart', e => { galleryTouchX = e.changedTouches[0].clientX; }, {passive:true});
-            galleryLightbox.addEventListener('touchend', e => {
-                if (galleryTouchX === null) return;
-                const dx = e.changedTouches[0].clientX - galleryTouchX;
-                if (Math.abs(dx) > 55) showGalleryPhoto(galleryIndex + (dx < 0 ? 1 : -1));
-                galleryTouchX = null;
-            }, {passive:true});
-        
+
+                function openGallery(index, trigger) {
+                    clearTimeout(closeTimer);
+                    galleryTrigger = trigger;
+                    galleryLightbox.hidden = false;
+                    document.documentElement.classList.add('gallery-open');
+                    document.body.classList.add('gallery-open');
+                    if (mainEl) mainEl.inert = true;
+                    showGalleryPhoto(index);
+                    void galleryLightbox.offsetWidth; // flush so the fade-in transition runs
+                    galleryLightbox.classList.add('is-open');
+                    galleryClose.focus({ preventScroll: true });
+                }
+
+                function closeGallery() {
+                    if (!isOpen()) return;
+                    galleryLightbox.classList.remove('is-open');
+                    document.documentElement.classList.remove('gallery-open');
+                    document.body.classList.remove('gallery-open');
+                    if (mainEl) mainEl.inert = false;
+                    if (galleryTrigger) galleryTrigger.focus({ preventScroll: true });
+                    closeTimer = setTimeout(() => { galleryLightbox.hidden = true; }, reduceMotion ? 0 : 280);
+                }
+
+                galleryPhotos.forEach((tile, index) => tile.addEventListener('click', () => openGallery(index, tile)));
+                galleryClose.addEventListener('click', closeGallery);
+                document.getElementById('galleryPrev').addEventListener('click', () => showGalleryPhoto(galleryIndex - 1, -1));
+                document.getElementById('galleryNext').addEventListener('click', () => showGalleryPhoto(galleryIndex + 1, 1));
+
+                // Click on the dark backdrop (anywhere that isn't a control or the photo) closes the preview
+                galleryLightbox.addEventListener('click', e => {
+                    if (!e.target.closest('button, img, figcaption, .gallery-count, .gallery-thumbs')) closeGallery();
+                });
+
+                document.addEventListener('keydown', e => {
+                    if (!isOpen()) return;
+                    if (e.key === 'Escape') closeGallery();
+                    else if (e.key === 'ArrowRight') showGalleryPhoto(galleryIndex + 1, 1);
+                    else if (e.key === 'ArrowLeft') showGalleryPhoto(galleryIndex - 1, -1);
+                    else if (e.key === 'Home') { e.preventDefault(); showGalleryPhoto(0, -1); }
+                    else if (e.key === 'End') { e.preventDefault(); showGalleryPhoto(total - 1, 1); }
+                    else if (e.key === 'Tab') {
+                        const buttons = [...galleryLightbox.querySelectorAll('button')];
+                        const first = buttons[0], last = buttons[buttons.length - 1];
+                        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+                    }
+                });
+
+                // Touch: swipe left/right to change photo, swipe down to close
+                let touchStart = null;
+                galleryLightbox.addEventListener('touchstart', e => {
+                    if (e.target.closest('.gallery-thumbs') || e.touches.length > 1) { touchStart = null; return; }
+                    touchStart = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+                }, { passive: true });
+                galleryLightbox.addEventListener('touchend', e => {
+                    if (!touchStart) return;
+                    const dx = e.changedTouches[0].clientX - touchStart.x;
+                    const dy = e.changedTouches[0].clientY - touchStart.y;
+                    touchStart = null;
+                    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) showGalleryPhoto(galleryIndex + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+                    else if (dy > 90 && Math.abs(dx) < 60) closeGallery();
+                }, { passive: true });
+            }
+
             // ----- floating hearts in the guest wishes section -----
             const fh = document.querySelector('#floatHearts');
             if (fh && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
