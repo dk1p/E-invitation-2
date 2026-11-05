@@ -180,19 +180,28 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
                 submitBtn.disabled=true;submitBtn.querySelector('span').textContent='SENDING…';
                 wishStatus.textContent='Sending your blessing…';
                 try {
-                    const response=await fetch('https://formsubmit.co/ajax/dineshkumarpdk33@gmail.com',{
-                        method:'POST',
-                        headers:{'Content-Type':'application/json','Accept':'application/json'},
-                        body:JSON.stringify({
-                            name,relation:document.getElementById('wishRelation').value||'Not specified',
-                            message,sticker:wishSticker.value,
-                            _subject:'New Wedding Wish for Ramesh Kumar & Tamil Selvi',
-                            _template:'table',_honey:wishForm.elements['_honey'].value
-                        })
-                    });
-                    if(!response.ok) throw new Error('Network error');
-                    const result=await response.json();
-                    if(result.success === false || result.success === 'false') throw new Error('Submission rejected');
+                    const ctrl=new AbortController();
+                    const timer=setTimeout(()=>ctrl.abort(),15000);
+                    let response;
+                    try {
+                        response=await fetch('https://formsubmit.co/ajax/dineshkumarpdk33@gmail.com',{
+                            method:'POST',
+                            headers:{'Content-Type':'application/json','Accept':'application/json'},
+                            signal:ctrl.signal,
+                            body:JSON.stringify({
+                                name,relation:document.getElementById('wishRelation').value||'Not specified',
+                                message,sticker:wishSticker.value,
+                                _subject:'New Wedding Wish for Ramesh Kumar & Tamil Selvi',
+                                _template:'table',_captcha:'false',_honey:wishForm.elements['_honey'].value
+                            })
+                        });
+                    } finally { clearTimeout(timer); }
+                    const result=await response.json().catch(()=>({}));
+                    if(!response.ok || result.success === false || result.success === 'false') {
+                        const err=new Error(result.message||'Submission rejected');
+                        err.detail=result.message||'';
+                        throw err;
+                    }
                     savedWishes.push({name,message,sticker:wishSticker.value});
                     savedWishes=savedWishes.slice(-20);
                     drawWishes();
@@ -201,7 +210,10 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
                     wishSuccess.classList.remove('success-enter');void wishSuccess.offsetWidth;wishSuccess.classList.add('success-enter');
                     showerPetals();
                 } catch(error) {
-                    wishStatus.textContent='Could not send your wish. Please try again.';
+                    wishStatus.textContent=location.protocol==='file:'
+                        ? 'Please open this page from a web address (not a local file) to send wishes.'
+                        : (error.name==='AbortError' ? 'This is taking too long. Please check your connection and try again.'
+                        : 'Could not send your wish. Please try again.');
                 } finally {
                     submitBtn.disabled=false;submitBtn.querySelector('span').textContent='SEND WISHES';
                 }
