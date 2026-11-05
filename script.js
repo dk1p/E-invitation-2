@@ -191,6 +191,8 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
                             body:JSON.stringify({
                                 name,relation:document.getElementById('wishRelation').value||'Not specified',
                                 message,sticker:wishSticker.value,
+                                sent_at:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'})+' IST',
+                                page:location.href,
                                 _subject:'New Wedding Wish for Ramesh Kumar & Tamil Selvi',
                                 _template:'table',_captcha:'false',_honey:wishForm.elements['_honey'].value
                             })
@@ -210,7 +212,10 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
                     wishSuccess.classList.remove('success-enter');void wishSuccess.offsetWidth;wishSuccess.classList.add('success-enter');
                     showerPetals();
                 } catch(error) {
-                    wishStatus.textContent=location.protocol==='file:'
+                    console.error('FormSubmit error:',error.detail||error);
+                    wishStatus.textContent=/activat/i.test(error.detail||'')
+                        ? 'Wishes are almost ready: the host must confirm the activation email from FormSubmit first.'
+                        : location.protocol==='file:'
                         ? 'Please open this page from a web address (not a local file) to send wishes.'
                         : (error.name==='AbortError' ? 'This is taking too long. Please check your connection and try again.'
                         : 'Could not send your wish. Please try again.');
