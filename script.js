@@ -404,3 +404,153 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
             window.addEventListener('scroll', syncScrollTop, {passive:true});
             syncScrollTop();
             scrollTopBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));
+
+/* =========================================================
+   SECTION SCROLL REVEAL
+========================================================= */
+
+const sectionRevealObserver =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(
+        entry => {
+
+          if (
+            entry.isIntersecting
+          ) {
+
+            entry.target
+              .classList
+              .add('in-view');
+
+          }
+
+        }
+      );
+
+    },
+    {
+      threshold: 0.12
+    }
+  );
+
+
+
+document
+  .querySelectorAll(
+    '.reveal'
+  )
+  .forEach(
+    element =>
+      revealObserver.observe(
+        element
+      )
+  );
+
+
+/* =========================================================
+   SAVE THE DATE: photo, date plate, falling petals
+========================================================= */
+(function () {
+  const sd = document.getElementById('saveDate');
+  if (!sd) return;
+  const plate = document.getElementById('sdPlate');
+  const confetti = document.getElementById('sdConfetti');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Picture fades in as soon as the section opens.
+  const openObserver = new IntersectionObserver(entries => {
+    if (entries.some(e => e.isIntersecting)) {
+      sd.classList.add('photo-open');
+      openObserver.disconnect();
+    }
+  }, { threshold: 0.12 });
+  openObserver.observe(sd);
+
+  function burst() {
+    if (reduce || !confetti) return;
+    const colors = ['#e9709a', '#f4a5be', '#f2a22b', '#e8662a', '#c9a858', '#ffffff'];
+    const glyphs = ['\u2740', '\u273F', '\u2764', '\u2726'];
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('span');
+      p.className = 'sd-petal';
+      p.textContent = glyphs[i % glyphs.length];
+      p.style.left = (8 + Math.random() * 84) + '%';
+      p.style.top = (30 + Math.random() * 20) + '%';
+      p.style.setProperty('--s', (12 + Math.random() * 14) + 'px');
+      p.style.setProperty('--c', colors[i % colors.length]);
+      p.style.setProperty('--d', (2.6 + Math.random() * 1.8) + 's');
+      p.style.setProperty('--dl', (Math.random() * 0.9) + 's');
+      p.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+      p.style.setProperty('--dy', (140 + Math.random() * 200) + 'px');
+      p.style.setProperty('--r', (Math.random() * 540 - 270) + 'deg');
+      confetti.appendChild(p);
+      setTimeout(() => p.remove(), 6000);
+    }
+  }
+
+  // Date plate and petals appear when the guest scrolls to the plate.
+  const plateObserver = new IntersectionObserver(entries => {
+    if (entries.some(e => e.isIntersecting)) {
+      sd.classList.add('is-revealed');
+      burst();
+      plateObserver.disconnect();
+    }
+  }, { threshold: 0.5 });
+  plateObserver.observe(plate || sd);
+})();
+
+/* =========================================================
+   EVENT VIDEOS
+   AUTOPLAY WHEN VISIBLE
+========================================================= */
+
+const videoObserver =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(
+        entry => {
+
+          const video =
+            entry.target;
+
+
+          if (
+            entry.isIntersecting
+          ) {
+
+            video.muted = true;
+
+            video.loop = true;
+
+            video
+              .play()
+              .catch(() => {});
+
+          } else {
+
+            video.pause();
+
+          }
+
+        }
+      );
+
+    },
+    {
+      threshold: 0.45
+    }
+  );
+
+
+
+document
+  .querySelectorAll(
+    '.lazy-video'
+  )
+  .forEach(
+    video =>
+      videoObserver.observe(video)
+  );
