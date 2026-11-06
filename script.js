@@ -134,95 +134,6 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 
 
-            // Interactive blessings: chip suggestions, stickers and a letter-style success screen.
-            const wishForm = document.getElementById('wishForm');
-            const wishName = document.getElementById('wishName');
-            const wishMessage = document.getElementById('wishMessage');
-            const wishCount = document.getElementById('wishCount');
-            const wishStatus = document.getElementById('wishStatus');
-            const wishWall = document.getElementById('wishWall');
-            const wishSuccess = document.getElementById('wishSuccess');
-            const wishSticker = document.getElementById('wishSticker');
-            const escapeWish = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
-            // A fresh guestbook on each visit; no previously saved browser wishes.
-            // FormSubmit handles email delivery, not shared public wish storage.
-            let savedWishes = [];
-            function drawWishes() {
-                document.getElementById('wishesTotal').textContent = savedWishes.length + (savedWishes.length === 1 ? ' WISH ON THIS DEVICE' : ' WISHES ON THIS DEVICE');
-                wishWall.innerHTML = savedWishes.slice(-6).reverse().map(w => `<article class="wish-bubble"><div class="wish-bubble-heart">${escapeWish(w.sticker || '♥')}</div><p>“${escapeWish(w.message)}”</p><strong>— ${escapeWish(w.name)}</strong></article>`).join('');
-            }
-            drawWishes();
-            const updateCount=()=>{wishCount.textContent=`${wishMessage.value.length} / 300`;};
-            wishMessage.addEventListener('input', updateCount);
-            document.querySelectorAll('[data-blessing]').forEach(button => button.addEventListener('click', () => {
-                const phrase=button.dataset.blessing;
-                const current=wishMessage.value.trim();
-                wishMessage.value=(current ? current+' ' : '')+phrase;
-                wishMessage.value=wishMessage.value.slice(0,300);
-                updateCount();wishMessage.focus();
-                button.classList.remove('chip-pop');void button.offsetWidth;button.classList.add('chip-pop');
-            }));
-            document.querySelectorAll('[data-sticker]').forEach(button => button.addEventListener('click', () => {
-                document.querySelectorAll('[data-sticker]').forEach(b=>{b.classList.remove('selected');b.setAttribute('aria-pressed','false');});
-                button.classList.add('selected');button.setAttribute('aria-pressed','true');wishSticker.value=button.dataset.sticker;
-            }));
-            document.getElementById('writeAnother').addEventListener('click', () => {
-                wishSuccess.hidden=true;wishForm.hidden=false;wishForm.reset();wishSticker.value='🌸';
-                document.querySelectorAll('[data-sticker]').forEach(b=>{const selected=b.dataset.sticker==='🌸';b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});
-                updateCount();wishStatus.textContent='';wishName.focus();
-            });
-            document.getElementById('seeWish').addEventListener('click', () => document.getElementById('wishWall').scrollIntoView({behavior:'smooth',block:'center'}));
-            wishForm.addEventListener('submit', async e => {
-                e.preventDefault();
-                const name=wishName.value.trim(),message=wishMessage.value.trim();
-                if(!name || !message) return;
-                const submitBtn=wishForm.querySelector('.wish-submit');
-                submitBtn.disabled=true;submitBtn.querySelector('span').textContent='SENDING…';
-                wishStatus.textContent='Sending your blessing…';
-                try {
-                    const ctrl=new AbortController();
-                    const timer=setTimeout(()=>ctrl.abort(),15000);
-                    let response;
-                    try {
-                        response=await fetch('https://formsubmit.co/ajax/dineshkumarpdk33@gmail.com',{
-                            method:'POST',
-                            headers:{'Content-Type':'application/json','Accept':'application/json'},
-                            signal:ctrl.signal,
-                            body:JSON.stringify({
-                                name,relation:document.getElementById('wishRelation').value||'Not specified',
-                                message,sticker:wishSticker.value,
-                                sent_at:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'})+' IST',
-                                page:location.href,
-                                _subject:'New Wedding Wish for Ramesh Kumar & Tamil Selvi',
-                                _template:'table',_captcha:'false',_honey:wishForm.elements['_honey'].value
-                            })
-                        });
-                    } finally { clearTimeout(timer); }
-                    const result=await response.json().catch(()=>({}));
-                    if(!response.ok || result.success === false || result.success === 'false') {
-                        const err=new Error(result.message||'Submission rejected');
-                        err.detail=result.message||'';
-                        throw err;
-                    }
-                    savedWishes.push({name,message,sticker:wishSticker.value});
-                    savedWishes=savedWishes.slice(-20);
-                    drawWishes();
-                    document.getElementById('thankYouName').textContent='Thank you, '+name+'!';
-                    wishForm.hidden=true;wishSuccess.hidden=false;
-                    wishSuccess.classList.remove('success-enter');void wishSuccess.offsetWidth;wishSuccess.classList.add('success-enter');
-                    showerPetals();
-                } catch(error) {
-                    console.error('FormSubmit error:',error.detail||error);
-                    wishStatus.textContent=/activat/i.test(error.detail||'')
-                        ? 'Wishes are almost ready: the host must confirm the activation email from FormSubmit first.'
-                        : location.protocol==='file:'
-                        ? 'Please open this page from a web address (not a local file) to send wishes.'
-                        : (error.name==='AbortError' ? 'This is taking too long. Please check your connection and try again.'
-                        : 'Could not send your wish. Please try again.');
-                } finally {
-                    submitBtn.disabled=false;submitBtn.querySelector('span').textContent='SEND WISHES';
-                }
-            });
             // Native share sheet on supported devices; clipboard fallback on others.
             document.getElementById('shareLocation').addEventListener('click',async () => {
                 const url='https://maps.app.goo.gl/NVXcCCZq2K7c6fYa9?g_st=aw';
@@ -392,17 +303,6 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
                     if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) showGalleryPhoto(galleryIndex + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
                     else if (dy > 90 && Math.abs(dx) < 60) closeGallery();
                 }, { passive: true });
-            }
-
-            // ----- floating hearts in the guest wishes section -----
-            const fh = document.querySelector('#floatHearts');
-            if (fh && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                for (let i = 0; i < 14; i++) {
-                    const h = document.createElement('i');
-                    h.textContent = i % 3 ? '❤' : '✦';
-                    h.style.cssText = `left:${Math.random()*100}%;font-size:${10+Math.random()*16}px;animation-duration:${9+Math.random()*8}s;animation-delay:${-Math.random()*12}s;--sx:${Math.random()*80-40}px`;
-                    fh.appendChild(h);
-                }
             }
 
             // Floating hearts and stars in the countdown section.
